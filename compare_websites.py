@@ -6,6 +6,14 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import csv
+import tkinter as tk
+from tkinter import filedialog
+
+def select_file():
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename()
+    return file_path
 
 def process_urls(csv_file):
     with open(csv_file, newline='', encoding='utf-8') as csvfile:
@@ -76,6 +84,6 @@ def compare_images(img1, img2):
     return combined_diff_img
 
 if __name__ == "__main__":
-    csv_file = "urls.csv"
+    csv_file = select_file()
     process_urls(csv_file)
 

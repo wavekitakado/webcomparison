@@ -3,7 +3,6 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import csv
 import tkinter as tk
@@ -32,7 +31,7 @@ def take_screenshot(url):
     options.headless = True
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--log-level=3")
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Chrome(options=options)
     driver.set_window_size(1920, 1080)
     driver.get(url)
     

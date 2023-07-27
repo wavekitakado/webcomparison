@@ -4,6 +4,7 @@ from PIL import Image
 from io import BytesIO
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import csv
 import tkinter as tk
 from tkinter import filedialog
@@ -14,7 +15,14 @@ def select_file():
     file_path = filedialog.askopenfilename()
     return file_path
 
+def select_directory():
+    root = tk.Tk()
+    root.withdraw()
+    dir_path = filedialog.askdirectory()
+    return dir_path
+
 def process_urls(csv_file):
+    save_dir = select_directory()
     with open(csv_file, newline='', encoding='utf-8') as csvfile:
         url_reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         for i, url_pair in enumerate(url_reader):
@@ -23,7 +31,8 @@ def process_urls(csv_file):
             img2 = take_screenshot(url2)
 
             combined_diff_img = compare_images(img1, img2)
-            combined_diff_img.save(f"combined_diff_{i}.png")
+            save_path = os.path.join(save_dir, f"combined_diff_{i}.png")
+            combined_diff_img.save(save_path)
 
 
 def take_screenshot(url):
@@ -31,7 +40,7 @@ def take_screenshot(url):
     options.headless = True
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--log-level=3")
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
     driver.set_window_size(1920, 1080)
     driver.get(url)
     
